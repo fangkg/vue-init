@@ -5,7 +5,7 @@ function defineReactive(obj, key, val) {
     observe(val)
 
     // 每执行一次defineReactive就会创建一个Dep实例
-    const dep = new dep()
+    const dep = new Dep()
 
     Object.defineProperty(obj, key, {
         get() {
@@ -40,7 +40,6 @@ function observe(obj) {
 }
 
 // 代理data中的数据
-
 function proxy(vm) {
     Object.keys(vm.$data).forEach(key => {
         Object.defineProperty(vm, key, {
@@ -136,6 +135,7 @@ class Compiler {
         // 处理元素上面的属性 典型的是f- @ 开头
         const attrs = node.attributes
         Array.from(attrs).forEach(attr => {
+            // attr: { name: 'f-text', value: 'counter' }
             const attrName = attr.name 
             const exp = attr.value
             if (attrName.indesOf('f-') === 0) {
@@ -160,7 +160,6 @@ class Compiler {
     // 所有动态绑定都需要创建更新函数以及对应的watcher实例
     // 动态绑定都要做两件事 首先解析动态值 其次创建更新函数
     // 如果对应的exp的值发生变化，执行这个watcher的更新函数
-
     update(node, exp, dir) {
         // 初始化
         const fn = this[dir + 'Updater']
